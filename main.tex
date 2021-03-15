@@ -1,0 +1,451 @@
+% [Overleaf] https://www.overleaf.com/read/hxssbjmngmnq
+% [YouTube] https://youtu.be/EDV7Xx4L5Dk
+% [GitHub] https://github.com/nobucshirai/infona2020_slide_10
+\documentclass[dvipdfmx,aspectratio=169,20pt]{beamer}
+\usepackage{bxdpx-beamer}
+
+% Beamer theme
+\usetheme{Boadilla}
+
+%%%%% JAPANESE FONT SETTINGS %%%%%
+\usepackage[utf8]{inputenc}
+\usepackage{pxjahyper}
+\renewcommand{\kanjifamilydefault}{\gtdefault} % for Gothic Japanese fonts
+\newcommand{\myfontsetting}[3]{{\fontsize{#1}{#2}\selectfont #3}}
+\usepackage[deluxe,uplatex]{otf} % needed to use super bold Japanese fonts
+\usepackage[unicode,noto-otc]{pxchfon} % needed to use super bold Japanese fonts
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% SETTINGS FOR MATH SYMBOLS %%%%%
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+%\usepackage{graphicx}
+\usepackage{latexsym}
+\usefonttheme{professionalfonts} % use Serif fonts for equations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{fancybox,ascmac}
+\usepackage{url}
+\usepackage[many]{tcolorbox}
+
+%%%%% ALGORITHM SETTING %%%%%
+\usepackage{algorithm}
+\usepackage[noend]{algorithmic}
+\algsetup{linenosize=\color{fg!50}\fontsize{8pt}{8pt}\selectfont}
+\renewcommand\algorithmicdo{\bfseries :}
+\renewcommand\algorithmicthen{\bfseries :}
+\renewcommand\algorithmicrequire{\textbf{Input:}}
+\renewcommand\algorithmicensure{\textbf{Output:}}
+\renewcommand{\algorithmicprint}{\textbf{break}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% tikz関係 %%%
+\usepackage{tikz}
+\usetikzlibrary{matrix}
+\usetikzlibrary{positioning}
+\tikzset{>=stealth}
+\usetikzlibrary{angles,arrows.meta,backgrounds,calc,intersections,positioning,quotes,scopes,shapes.arrows,through}
+\usepackage[customcolors]{hf-tikz}
+\tikzset{offset def/.style={above left offset={-0.1,0.8},below right offset={0.1,-0.65},},integral first/.style={offset def,},integral second/.style={offset def,set fill color=green!50!lime!60,set border color=green!40!black,},sums/.style={offset def,set fill color=blue!20!cyan!60,set border color=blue!60!cyan,}}
+\setbeamertemplate{navigation symbols}{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{myblue1}{RGB}{45,130,200}
+\definecolor{myblue2}{RGB}{26,89,142}
+
+\setbeamercolor*{structure}{fg=myblue1,bg=blue}
+\setbeamercolor{block title}{fg=myblue1!50!black}
+\setbeamercolor*{block title example}{fg=white,bg=myblue2}
+\setbeamercolor*{palette primary}{use=structure,fg=white,bg=structure.fg}
+\setbeamercolor*{palette secondary}{use=structure,fg=white,bg=structure.fg!75!black}
+\setbeamercolor*{palette tertiary}{use=structure,fg=white,bg=structure.fg!50!black}
+\setbeamercolor*{palette quaternary}{fg=black,bg=myblue1}
+
+\setbeamerfont{alerted text}{series=\bfseries}
+\setbeamerfont{section in toc}{series=\mdseries}
+\setbeamerfont{frametitle}{size=\Large,series=\bfseries}
+\setbeamerfont{title}{size=\LARGE,series=\bfseries}
+\setbeamerfont{date}{size=\small}
+
+\setbeamertemplate{block title}[shadow=false]
+\setbeamertemplate{blocks}[rounded][shadow=false]
+
+%\makeatletter
+
+%%%%% BEAMER FOOTLINE SETTINGS %%%%%%
+\setbeamertemplate{footline}[frame number]{}
+\setbeamerfont{footline}{size=\bf\footnotesize\small}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% BEAMER ITEM SETTINGS %%%%%
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{itemize subitem}[triangle]
+\setbeamertemplate{enumerate item}[circle]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+%%%%% START_TAG B %%%%%
+\frametitle{[問題] I\hspace{-.1em}X-B}
+%\noindent{\bf I\hspace{-.1em}X-B.}
+
+\myfontsetting{18pt}{18pt}{
+表~\ref{table:pokemon_go}
+\myfontsetting{12pt}{12pt}{(次ページ)}
+にある8匹のポケモンのステータスのデータから $3\times 3$ の相関行列を構成し、ベキ乗法を用いて絶対値が最大の固有値 $\lambda_1$ とそれに対応する固有ベクトル $\bm{y}_1$ を求めるプログラムを作成せよ。
+固有ベクトルは長さを1に正規化し、値は有効数字4桁で5桁目を四捨五入して求めよ。%\\
+}\\
+\myfontsetting{10pt}{10pt}{
+※ 固有ベクトルを決める際に残る向きの自由度はどちらの方向を選んでも構わない。
+}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{[問題] I\hspace{-.1em}X-B 表~\ref{table:pokemon_go}}
+
+\myfontsetting{12pt}{12pt}{
+\begin{table}[htbp]
+    \centering
+\begin{tabular}{|c||c|c|c|}
+\hline
+ポケモン & HP & 攻撃 & 防御\\
+\hline
+ピカチュウ  & 111 & 112 & 96\\
+ライチュウ  & 155 & 193 & 151\\
+イーブイ	& 146 & 104 & 114\\
+コイキング	& 85 & 29 & 85\\
+ギャラドス	& 216& 237 & 186\\
+カビゴン	& 330 & 190 & 169\\
+ミュウ	    & 225 &210 & 210\\
+ミュウツー	& 214 & 300 & 182\\
+\hline
+\end{tabular}
+\caption{
+\myfontsetting{10pt}{10pt}{
+「ポケモンGO」に出てくる8匹のポケモンのステータス。データは以下のサイトを参照した (\url{https://pokemongo.gamewith.jp/article/show/35945})。\label{table:pokemon_go}}
+}
+\end{table}
+}
+%%%%% END_TAG B %%%%%
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{[略解] I\hspace{-.1em}X-B}
+
+$\lambda_1 = 2.533,\bm{y}_1 = [ 0.5485, 0.5788, 0.6035]^\mathsf{T}$
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\large [手法解説]}
+
+\begin{block}{\myfontsetting{20pt}{20pt}{\bf ベキ乗法} {\small(Power method)}}
+\myfontsetting{15pt}{15pt}{
+    用意した初期ベクトルに行列 $A$ をかけて正規化する処理を繰り返すことで行列 $A$ の絶対値最大の固有値と対応する固有ベクトルを計算する方法
+}
+\end{block}
+
+\vspace{-2mm}
+
+\begin{itemize}
+    %\setlength{\itemsep}{0.05cm}
+    \item \myfontsetting{12pt}{12pt}{
+    固有値同士の大きさの比を利用して絶対値が最大の固有値を持つ固有ベクトルに近づけていく方法
+    }
+    \item \myfontsetting{12pt}{12pt}{
+    逆反復法ではベキ乗法の原理を絶対値最大の固有値を持つ固有対以外に応用する
+    }
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\myfontsetting{28pt}{28pt}{ベキ乗法の仕組み}}
+
+\begin{itemize}
+    \setlength{\itemsep}{0.05cm}
+    \item \myfontsetting{15pt}{15pt}{
+    初期に与えるベクトル $\bm{u}^{(0)}$ \myfontsetting{10pt}{10pt}{$\in \mathbb{R}^n$} を行列 $A$ の固有値 $\lambda_i$ \myfontsetting{10pt}{10pt}{$(1\le i \le n)$} の絶対値の大きい順に並べた固有ベクトル $\bm{y}_i$ \myfontsetting{10pt}{10pt}{$(1\le i \le n)$} の線形結合で \myfontsetting{10pt}{10pt}{(表せると思って)} 表す
+    }
+    \begin{itemize}
+        %\setlength{\itemsep}{0.05cm}
+        \item \myfontsetting{15pt}{15pt}{
+        $\bm{u}^{(0)}=c_1\bm{y}_1+c_2\bm{y}_2+\cdots +c_n \bm{y}_n$
+        }
+    \end{itemize}
+    \item \myfontsetting{15pt}{15pt}{
+    $\bm{u}^{(0)}$ から初めて漸化式 \myfontsetting{12pt}{12pt}{$\bm{u}^{(k+1)} = \frac{A\bm{u}^{(k)}}{\|A\bm{u}^{(k)}\|}$} を繰り返す
+    }
+    \begin{itemize}
+        \setlength{\itemsep}{0.05cm}
+        \item \myfontsetting{12pt}{12pt}{
+        $\bm{u}^{(k)}=\frac{A^k \bm{u}^{(0)}}{\|A^k \bm{u}^{(0)}\|}=\frac{1}{\|A^k \bm{u}^{(0)}\|}\left\{c_1 \lambda_1^k\, \bm{y}_1 + c_2 \lambda_2^k\, \bm{y}_2+\cdots +c_n \lambda_n^k \bm{y}_n\right\}$
+        }
+        \vspace{1mm}
+        \begin{itemize}
+            \setlength{\itemsep}{0.05cm}
+            \item \myfontsetting{10pt}{10pt}{
+                $A$ をかけるたびに $\lambda_i$ のベキが増えていくのでベキ乗法
+            }
+        \end{itemize}
+        \item \myfontsetting{12pt}{12pt}{
+        $\bm{u}^{(k)}$ の係数の比は $\left(\frac{\lambda_i}{\lambda_1} \right)^k \times \frac{c_i}{c_1} \to 0$ $(k\to \infty)$ \myfontsetting{8pt}{8pt}{$(2\le i \le n)$} となるため
+        十分大きな反復回数 $k$ に対して $\bm{u}^{(k+1)} \sim \frac{\bm{y}_1}{\|\bm{y}_1\|}$ となる
+        }
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%タイトルページ
+
+\title{\myfontsetting{28pt}{28pt}{固有値問題と特異値分解 (2)}}
+
+\titlegraphic{\vspace{-7mm}\flushright\includegraphics[width=1.8cm,height=1.8cm]{hattari_kun_good_org.eps}}
+
+\setbeamertemplate{title page}{%
+    \begin{flushright}
+        \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
+    \end{flushright}
+    \vspace{-0.6cm}
+    \hspace{1.5cm}{\selectfont\usebeamerfont{subtitle} \usebeamercolor[fg]{subtitle} [\href{https://youtu.be/EDV7Xx4L5Dk}{数値解析 第10回}] \par}
+    \vspace{0.5cm}
+    %\vspace{2.5em}
+    {\centering\usebeamerfont{title} \usebeamercolor[fg]{title} \inserttitle \par}
+    \vspace{0.5cm}
+    \begin{center}
+        データを眺めるのに便利な基底を探す
+    \end{center}
+}
+
+\date[\todey]{}
+
+\frame{\titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\large 固有値問題の応用例}
+
+\begin{block}{\myfontsetting{20pt}{20pt}{\bf 主成分分析} {\small (Principal component analysis (PCA))}}
+\myfontsetting{15pt}{15pt}{
+    データから作成した分散・共分散行列の固有値問題を解いて得られた固有ベクトルを固有値が大きい順番に用いることでデータをプロットする軸を取り直す方法
+}
+\end{block}
+
+\vspace{-2mm}
+
+\begin{itemize}
+    %\setlength{\itemsep}{0.05cm}
+    \item \myfontsetting{12pt}{12pt}{
+    分散・共分散行列は対称行列であり固有ベクトル同士は互いに直交する
+    }
+    \item \myfontsetting{12pt}{12pt}{
+    求めた固有ベクトルを全て使わず固有値が大きい方から指定した数取り出して使用することにより特徴量の次元を削減することができる {\bf (次元削減; Dimensionality reduction)}
+    }
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{[問題] X-A}
+
+%%%%% START_TAG A %%%%%
+%\noindent{\bf [X. 固有値問題と特異値分解 (2)]}%RETURN
+
+%\noindent{\bf X-A.}
+\myfontsetting{15pt}{17pt}{
+{I\hspace{-.1em}X-B} で作成した相関行列について考える。
+逆反復法により残りの固有対 $(\lambda_2, \bm{y}_2)$, $(\lambda_3, \bm{y}_3)$ を求める問題を考える。逆反復法で指定する固有値の近似値 $\sigma$ の値を $0$, $\lambda_1\times 1/200$, $\lambda_1\times 2/200$, $\dots$, $\lambda_1\times 199/200$ と変えながら問1で求めた相関行列の固有値・固有ベクトルを求めるプログラムを作成し残りの2つの固有対を求めよ。固有ベクトルは長さを1に正規化し、値は有効数字4桁で5桁目を四捨五入して求めよ。%\\
+}\\
+\myfontsetting{10pt}{10pt}{
+※ 固有ベクトルを決める際に残る向きの自由度はどちらの方向を選んでも構わない。
+}
+%%%%% END_TAG A %%%%%
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{[略解] X-A}
+%\vspace{-0.5cm}
+
+$\lambda_2 = 0.3594, \bm{y}_2 = [-0.8040, 0.5633, 0.1904]^\mathsf{T}$
+
+$\lambda_3 = 0.1076, \bm{y}_3 = [-0.2297, -0.5896, 0.7743]^\mathsf{T}$
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\large [手法解説]}
+
+\begin{block}{\myfontsetting{20pt}{20pt}{\bf 逆反復法} {\small(Inverse iteration method)}}
+\myfontsetting{15pt}{15pt}{
+    求めたい固有値の近似値として $\sigma$ を与え $G=(\sigma I - A)^{-1}$ についてベキ乗法を適用すると $\sigma$ にもっとも近い固有値と対応する固有ベクトルが得られる手法
+}
+\end{block}
+
+\vspace{-2mm}
+
+\begin{itemize}
+    %\setlength{\itemsep}{0.05cm}
+    \item \myfontsetting{12pt}{12pt}{
+        逆反復法では行列 $A$ の固有対が $(\lambda, \bm{u})$ が持つ以下の性質を利用する
+    }
+    \begin{itemize}
+        %\setlength{\itemsep}{0.05cm}
+        \item \myfontsetting{12pt}{12pt}{
+            $A-\sigma I$ という行列を考えると $(A-\sigma I)\bm{u}=(\lambda-\sigma)\bm{u}$ より固有対として $(\lambda-\sigma, \bm{u})$ を持つ
+        }
+        \item \myfontsetting{12pt}{12pt}{
+            逆行列 $A^{-1}$ は固有対 $(\frac{1}{\lambda}, \bm{u})$ を持つ 
+        }
+        \begin{itemize}
+            \myfontsetting{10pt}{10pt}{
+                \item $A\bm{u}=\lambda\bm{u} \Leftrightarrow A^{-1} A\bm{u}=\lambda A^{-1}\bm{u}\Leftrightarrow A^{-1}\bm{u} =\frac{1}{\lambda}\bm{u}$ より
+            }
+        \end{itemize}
+    \end{itemize}
+    %\item \myfontsetting{12pt}{12pt}{
+    %行列 $A$ の固有対が $(\lambda, \bm{u})$ であるとき $A-\sigma I$ という行列を考えると $(A-\sigma I)\bm{u}=(\lambda-\sigma)\bm{u}$ より固有対として $(\lambda-\sigma, \bm{u})$ を持つ
+    %}
+    %\item \myfontsetting{12pt}{12pt}{
+    %逆反復法ではベキ乗法の原理を最大固有値を持つ固有対を求める場合以外に応用する
+    %}
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\myfontsetting{28pt}{28pt}{逆反復法の仕組み}}
+
+\begin{itemize}
+    \setlength{\itemsep}{0.05cm}
+    \item \myfontsetting{15pt}{15pt}{
+    行列 $A$ の固有対 $(\lambda_i, \bm{u}_i)$ \myfontsetting{8pt}{8pt}{$(1\le i \le n)$} とすると $G=(\sigma I - A)^{-1}$ の固有対は  $(\frac{1}{\sigma - \lambda_i}, \bm{u}_i)$ \myfontsetting{8pt}{8pt}{$(1\le i \le n)$} となる
+    }
+    \item \myfontsetting{15pt}{15pt}{
+    $G$ にベキ乗法を適用すれば $\frac{1}{\sigma - \lambda_i}$ のうちの絶対値が最大のものとその固有ベクトルが得られる}
+    \begin{itemize}
+        \item  \myfontsetting{12pt}{12pt}{
+        設定した $\sigma$ にもっとも近い固有値 $\lambda_i$ を持つ固有ベクトルが得られる
+    }
+    \end{itemize}
+    \item \myfontsetting{15pt}{15pt}{
+    実際には $\sigma I - A$ の逆行列 $G$ を直接求めず、 $\sigma I - A$ をLU分解してから前進代入・後退代入する
+    }
+\end{itemize}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{{\large [手法] 逆反復法 \myfontsetting{15pt}{15pt}{(全体像)}}}
+\begin{block}{\myfontsetting{18pt}{18pt}{\bf 逆反復法}
+\myfontsetting{16pt}{18pt}{(Inverse iteration method)}}
+    \myfontsetting{14pt}{16pt}{
+    \begin{algorithmic}[1]
+        \label{alg:inverse_iteration_method}
+        \REQUIRE $A$, $\bm{u}$ \myfontsetting{10pt}{10pt}{$\in \mathbb{R}^n$}, $k_\mathrm{max}$, $\varepsilon$
+        \ENSURE $\rho$ \myfontsetting{10pt}{10pt}{($=\frac{1}{\sigma-\lambda}$)}, $\bm{y}$
+        \STATE $L, A \leftarrow$ \myfontsetting{8pt}{8pt}{$\mathrm{LU\_FACTORIZATION}$}$(A)$ \hspace{2mm}  \myfontsetting{8pt}{8pt}{[左辺の $A$ は上三角行列] (p.~\ref{func:LU_FACTORIZATION})} \label{op:LU_FACTORIZATION}
+
+        \FOR{$k=0,1,\dots,k_\mathrm{max}$}
+        \STATE $\bm{y} \leftarrow \bm{u} / \|\bm{u}\|$ \label{op:normalization_2}
+        \STATE $\bm{u} \leftarrow$ \myfontsetting{8pt}{8pt}{$\mathrm{F\_B\_SUBSTITUTION}$}$(L, A, \bm{y})$\hspace{2mm} \myfontsetting{8pt}{8pt}{[前進代入・後退代入を関数化したもの (p.~\ref{func:F_B_SUBSTITUTION})]} \label{op:F_B_SUBSTITUTION}
+        \STATE $\rho \leftarrow (\bm{y}, \bm{u})$ \label{op:inner_product_2}
+        \IF{$\|\bm{u} - \rho \bm{y}\|\le \varepsilon$} \label{op:vector_norm_2}
+        \PRINT
+        \ENDIF
+        \ENDFOR
+    \end{algorithmic}
+    }
+\end{block}
+
+\vspace{-4mm}
+
+\myfontsetting{8pt}{8pt}{※ 上記アルゴリズムのうち $\mathbf{\ell}$.~\ref{op:normalization_2}, $\mathbf{\ell\ell}$.~\ref{op:inner_product_2}, \ref{op:vector_norm_2} の詳細は第9回授業スライドのベキ乗法の説明部分に示している}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{{\large [手法] \myfontsetting{20pt}{20pt}{$\sigma I - A$} のLU分解}
+\myfontsetting{18pt}{18pt}{(p.~\ref{alg:inverse_iteration_method}, $\mathbf{\ell}$.~\ref{func:LU_FACTORIZATION})}
+}
+\begin{block}{\myfontsetting{12pt}{12pt}{$\mathrm{LU\_FACTORIZATION}$}\myfontsetting{14pt}{14pt}{$(A)$} \label{func:LU_FACTORIZATION}}
+    \myfontsetting{12pt}{14pt}{
+    \begin{algorithmic}[1]
+                \REQUIRE $A$, $\sigma$
+        \ENSURE $L$, $A$ \hspace{2mm} \myfontsetting{8pt}{8pt}{[$A$ は実行後上三角行列になる]}
+        \STATE $L \leftarrow I$
+        \STATE $A \leftarrow \sigma I - A$
+        \FOR{$k = 0,1,2, \dots, n-2$}
+        \FOR{$i = k+1,k+2, \dots, n-1$}
+        \STATE $m_{ik} \leftarrow a_{ik}/a_{kk}$ \hspace{2mm} \myfontsetting{8pt}{8pt}{[$a_{kk} \neq 0$ を仮定]}
+        \STATE $a_{ik} \leftarrow 0$
+        \FOR{$j = k+1,k+2, \dots, n-1$}
+        \STATE $a_{ij} \leftarrow a_{ij} - m_{ik}a_{kj}$
+        \ENDFOR
+        \STATE $l_{ik} \leftarrow m_{ik}$
+        \ENDFOR
+        \ENDFOR
+        \RETURN $L$, $A$
+    \end{algorithmic}
+    }
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+
+%\vspace{-2mm}
+
+\myfontsetting{22pt}{22pt}{\bf\color{myblue1}[手法] 前進代入・後退代入の関数
+\myfontsetting{18pt}{18pt}{(p.~\ref{alg:inverse_iteration_method}, $\mathbf{\ell}$.~\ref{op:F_B_SUBSTITUTION})}
+}
+
+%\frametitle{{\large [手法] 前進代入・後退代入}}
+
+\begin{block}{{\myfontsetting{12pt}{12pt}{$\mathrm{F\_B\_SUBSTITUTION}$}\myfontsetting{14pt}{14pt}{$(L, A, \bm{y})$} }\label{func:F_B_SUBSTITUTION}}
+    \myfontsetting{10pt}{12pt}{
+    \begin{algorithmic}[1]
+        \REQUIRE $L$, $A$, $\bm{y}$
+        \ENSURE $\bm{u}$
+        \STATE $z_0 \leftarrow y_0$ 
+        \FOR{$i = 1, \dots, n-1$}
+        \STATE $sum \leftarrow 0$
+        \FOR{$j = 0,1, \dots, i-1$}
+        \STATE $sum \leftarrow sum + l_{ij}z_j$
+        \ENDFOR
+        \STATE $z_i \leftarrow y_i - sum$
+        \ENDFOR
+        \STATE $u_{n-1}\leftarrow z_{n-1}/a_{n-1,n-1}$
+        \FOR{$i=n-2,\dots,0$}
+        \STATE $sum \leftarrow 0$
+        \FOR{$j=i+1,i+2,\dots,n-1$}
+        \STATE $sum \leftarrow sum + a_{ij}u_j$
+        \ENDFOR
+        \STATE $u_i \leftarrow \left( z_i - sum \right)/a_{ii}$
+        \ENDFOR
+        \RETURN $\bm{u}$
+    \end{algorithmic}
+    }
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+%%%%% PASTE_START_TAG B %%%%%
+%\noindent{\bf X-B.}
+\frametitle{[問題] X-B (1)}
+
+\myfontsetting{18pt}{20pt}{
+I\hspace{-.1em}X-Bの表1にあるデータをそれぞれのステータスが平均が0、分散が1となるように正規化するプログラムを作成し、正規化されたデータを元にI\hspace{-.1em}X-B表1に相当する表を作成せよ。値は有効数字4桁で5桁目を四捨五入して求めよ。%\\
+}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{[問題] X-B (2)}
+
+\myfontsetting{18pt}{20pt}{
+問1で正規化したデータの3次元ベクトル空間の基底を I\hspace{-.1em}X-B および X-A で求めた3つの固有ベクトルに置き換え、新しい基底での座標を求めてI\hspace{-.1em}X-B表1に相当する表を作成せよ。値は有効数字4桁で5桁目を四捨五入して求めよ。%\\
+}\\
+\myfontsetting{12pt}{12pt}{
+※ 問1, 2において表は手書き作っても良いし、プログラムの出力をコピー\&ペーストしたものでも良い。
+}
+%%%%% PASTE_END_TAG B %%%%%
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
